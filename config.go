@@ -14,11 +14,6 @@
 // function which will convert a panic into a an error.
 package shrub
 
-import (
-	"fmt"
-	"time"
-)
-
 // Configuration is the top-level representation of the components of
 // an evergreen project configuration.
 type Configuration struct {
@@ -91,31 +86,4 @@ func (c *Configuration) Variant(id string) *Variant {
 	v := new(Variant)
 	c.Variants = append(c.Variants, v)
 	return v.Name(id)
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Highlevel project-wide configuration settings.
-
-// ExectTimeout allows you to set the exec timeout for all commands to
-// a specified value. This value has second-level granularity.
-func (c *Configuration) ExecTimeout(dur time.Duration) *Configuration {
-	c.ExecTimeoutSecs = int(dur.Seconds())
-	return c
-}
-
-func (c *Configuration) BatchTime(dur time.Duration) *Configuration {
-	c.BatchTimeSecs = int(dur.Seconds())
-	return c
-}
-
-func (c *Configuration) SetCommandType(t string) *Configuration {
-	switch t {
-	case "system", "setup", "task":
-		c.CommandType = t
-	default:
-		panic(fmt.Sprintf("%s, is not a valid command type", t))
-	}
-
-	return c
 }
